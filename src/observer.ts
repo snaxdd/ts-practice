@@ -81,17 +81,21 @@ class DataParser implements Subject {
 }
 
 class UsersObserver implements Observer {
-  public update(subject: Subject, dataType: string): void {
+  public update(subject: DataParser, dataType: string): void {
     if (dataType === 'users') {
+      let data = subject.currentData.filter((_, index) => index < 3);
       console.log('Получаем пользователей');
+      console.log(data);
     }
   }
 }
 
 class PostsObserver implements Observer {
-  public update(subject: Subject, dataType: string): void {
+  public update(subject: DataParser, dataType: string): void {
     if (dataType === 'posts') {
+      let data = subject.currentData.filter((_, index) => index < 3);
       console.log('Получаем посты');
+      console.log(data);
     }
   }
 }
