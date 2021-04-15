@@ -3,48 +3,39 @@ interface IGameConsole {
 }
 
 class GameConsole implements IGameConsole {
-  constructor(public storage: number, public ram: number) {}
-
-  playGames(): void {
-    console.log('Playing game ...');
+  public playGames(): void {
+    console.log('Playing game');
   }
 }
 
-class Decorator implements IGameConsole {
-  protected gameConsole: IGameConsole;
+class BaseDecorator implements IGameConsole {
+  private gameConsole: IGameConsole;
 
-  constructor(gameConsole: IGameConsole) {
-    this.gameConsole = gameConsole;
+  constructor(console: IGameConsole) {
+    this.gameConsole = console;
   }
 
-  playGames() {
-    return this.gameConsole.playGames();
-  }
-}
-
-class PlayVideo extends Decorator {
-  public playVideo(): void {
-    console.log('Playing video ...');
+  public playGames(): void {
+    this.gameConsole.playGames();
   }
 }
 
-class SonyPlaystation implements IGameConsole {
-  public storage: number;
-  public ram: number;
-
-  constructor(storage: number, ram: number) {
-    this.storage = storage;
-    this.ram = ram;
+class PlayVideosAndPlayGamesDecorator extends BaseDecorator {
+  public playVideos(): void {
+    console.log('Playing video...');
   }
-
-  playGames(): void {
-    console.log('Sony play games');
+  public playGames() {
+    super.playGames();
+    this.playVideos();
   }
 }
 
-let sony = new SonyPlaystation(200, 100);
-sony.playGames();
-let newSony = new PlayVideo(sony);
-newSony.playVideo();
-console.log(sony.ram);
-console.log(sony.storage);
+function clientCode(gameConsole: GameConsole): void {
+  gameConsole.playGames();
+}
+
+let gameConsole = new GameConsole();
+let newConsole = new PlayVideosAndPlayGamesDecorator(gameConsole);
+
+clientCode(gameConsole);
+clientCode(newConsole);
